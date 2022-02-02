@@ -1,2 +1,3 @@
-# actions
-GitHub Actions configs: composite actions and shared workflow configuration
+# RustCrypto: GitHub Actions Configs
+
+Composite actions and shared workflow configuration
