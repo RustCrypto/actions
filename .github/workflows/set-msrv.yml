@@ -1,0 +1,24 @@
+name: set-msrv
+
+on:
+  workflow_call:
+    inputs:
+      msrv:
+        required: true
+        type: string
+    outputs:
+      msrv:
+        value: ${{ jobs.set-msrv.outputs.msrv }}
+
+jobs:
+  set-msrv:
+    runs-on: ubuntu-latest
+    defaults:
+        run:
+            shell: bash
+    outputs:
+      msrv: ${{ steps.msrv.outputs.msrv }}
+    steps:
+      - uses: actions/checkout@v2
+      - id: msrv
+        run: echo "::set-output name=msrv::$(echo ${{ inputs.msrv }})"
