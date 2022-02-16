@@ -10,6 +10,10 @@ runs:
         override: true
         profile: minimal
     - run: rm ../Cargo.toml
+      shell: bash
     - run: cargo update -Z minimal-versions
+      shell: bash
     - run: cargo test --release
+      shell: bash
     - run: cargo test --release --all-features
+      shell: bash
