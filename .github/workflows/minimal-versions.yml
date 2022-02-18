@@ -27,4 +27,4 @@ jobs:
         run: cargo build --benches
       - run: rm ../Cargo.toml
       - run: cargo update -Z minimal-versions
-      - run: cargo hack test --feature-powerset
+      - run: cargo hack test --release --feature-powerset
