@@ -20,6 +20,6 @@ jobs:
     outputs:
       msrv: ${{ steps.msrv.outputs.msrv }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - id: msrv
         run: echo "::set-output name=msrv::$(echo ${{ inputs.msrv }})"
