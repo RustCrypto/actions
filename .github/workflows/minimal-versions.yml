@@ -7,6 +7,11 @@ on:
       working-directory:
         required: true
         type: string
+      nightly:
+        description: 'The version of rust-nightly to be used'
+        default: 'nightly'
+        required: false
+        type: string
 
 jobs:
   minimal-versions:
@@ -20,7 +25,7 @@ jobs:
       - uses: RustCrypto/actions/cargo-cache@master
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly-2022-11-21
+          toolchain: ${{ inputs.nightly }}
           override: true
           profile: minimal
       - uses: RustCrypto/actions/cargo-hack-install@master
