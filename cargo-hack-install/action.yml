@@ -8,7 +8,7 @@ runs:
     # yamllint disable rule:line-length
     - name: Install pre-compiled cargo-hack
       run: |
-        wget -O /tmp/binaries.tar.gz https://github.com/taiki-e/cargo-hack/releases/download/v0.5.12/cargo-hack-x86_64-unknown-linux-gnu.tar.gz
+        wget -O /tmp/binaries.tar.gz https://github.com/taiki-e/cargo-hack/releases/download/v0.5.24/cargo-hack-x86_64-unknown-linux-gnu.tar.gz
         tar -C /tmp -xzf /tmp/binaries.tar.gz
         mv /tmp/cargo-hack ~/.cargo/bin
       shell: bash
