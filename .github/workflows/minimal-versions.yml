@@ -9,7 +9,7 @@ on:
         type: string
       nightly:
         description: 'The version of rust-nightly to be used'
-        default: 'nightly'
+        default: 'nightly-2022-12-25' # pinned due to rust-lang/rust#106247
         required: false
         type: string
 
