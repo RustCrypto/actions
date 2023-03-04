@@ -9,7 +9,7 @@ on:
         type: string
       nightly:
         description: 'The version of rust-nightly to be used'
-        default: 'nightly-2022-12-25' # pinned due to rust-lang/rust#106247
+        default: 'nightly-2023-03-03'
         required: false
         type: string
 
@@ -23,11 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: RustCrypto/actions/cargo-cache@master
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.nightly }}
-          override: true
-          profile: minimal
       - uses: RustCrypto/actions/cargo-hack-install@master
       - name: Test benches build
         run: cargo build --benches
