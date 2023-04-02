@@ -12,6 +12,11 @@ on:
         default: 'nightly-2023-03-03'
         required: false
         type: string
+      install-zlint:
+        description: 'Install zlint in the PATH'
+        default: false
+        required: false
+        type: boolean
 
 jobs:
   minimal-versions:
@@ -23,6 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: RustCrypto/actions/cargo-cache@master
+      - name: Install zlint
+        if: inputs.install-zlint
+        uses: RustCrypto/actions/zlint-install@master
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.nightly }}
