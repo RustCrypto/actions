@@ -22,4 +22,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: msrv
-        run: echo "::set-output name=msrv::$(echo ${{ inputs.msrv }})"
+        run: echo "msrv=$(echo ${{ inputs.msrv }})" >> $GITHUB_OUTPUT
