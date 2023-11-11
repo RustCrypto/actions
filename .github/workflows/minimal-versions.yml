@@ -8,8 +8,13 @@ on:
         required: true
         type: string
       nightly:
-        description: 'The version of rust-nightly to be used'
-        default: 'nightly-2023-03-03'
+        description: 'rustc (nightly) version used to generate Cargo.lock'
+        default: 'nightly'
+        required: false
+        type: string
+      toolchain:
+        description: 'rustc version used to perform the build'
+        default: 'stable'
         required: false
         type: string
       install-zlint:
@@ -31,12 +36,17 @@ jobs:
       - name: Install zlint
         if: inputs.install-zlint
         uses: RustCrypto/actions/zlint-install@master
+        # Use `nightly` to recompute Cargo.lock with -Z minimal-versions
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.nightly }}
+      - run: rm ../Cargo.toml
+      - run: cargo update -Z minimal-versions
+        # Perform tests
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ inputs.toolchain }}
       - uses: RustCrypto/actions/cargo-hack-install@master
       - name: Test benches build
         run: cargo build --benches
-      - run: rm ../Cargo.toml
-      - run: cargo update -Z minimal-versions
       - run: cargo hack test --release --feature-powerset
