@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       nightly:
-        description: 'The version of rust-nightly to be used to resolve Cargo.lock'
+        description: 'rustc (nightly) version used to generate Cargo.lock'
         default: 'nightly'
         required: false
         type: string
