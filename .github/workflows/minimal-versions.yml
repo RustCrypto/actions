@@ -42,11 +42,11 @@ jobs:
           toolchain: ${{ inputs.nightly }}
       - run: rm ../Cargo.toml
       - run: cargo update -Z minimal-versions
+      - name: Test benches build
+        run: cargo build --benches
         # Perform tests
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.toolchain }}
       - uses: RustCrypto/actions/cargo-hack-install@master
-      - name: Test benches build
-        run: cargo build --benches
       - run: cargo hack test --release --feature-powerset
