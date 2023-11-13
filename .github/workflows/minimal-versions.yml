@@ -22,6 +22,12 @@ on:
         default: false
         required: false
         type: boolean
+      nightly_cmd:
+        type: string
+        default: cargo build --benches
+      stable_cmd:
+        type: string
+        default: cargo hack test --release --feature-powerset
 
 jobs:
   minimal-versions:
@@ -42,11 +48,10 @@ jobs:
           toolchain: ${{ inputs.nightly }}
       - run: rm ../Cargo.toml
       - run: cargo update -Z minimal-versions
-      - name: Test benches build
-        run: cargo build --benches
+      - run: ${{ inputs.nightly_cmd }}
         # Perform tests
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.toolchain }}
       - uses: RustCrypto/actions/cargo-hack-install@master
-      - run: cargo hack test --release --feature-powerset
+      - run: ${{ inputs.stable_cmd }}
