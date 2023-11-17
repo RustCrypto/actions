@@ -24,7 +24,7 @@ on:
         type: boolean
       nightly_cmd:
         type: string
-        default: cargo build --benches
+        default: ''
       stable_cmd:
         type: string
         default: cargo hack test --release --feature-powerset
