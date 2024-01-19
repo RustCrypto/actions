@@ -8,7 +8,7 @@ runs:
     # yamllint disable rule:line-length
     - name: Install zlint
       run: |
-        wget -O /tmp/zlint.tar.gz https://github.com/zmap/zlint/releases/download/v3.4.1/zlint_3.4.1_Linux_x86_64.tar.gz
+        wget -O /tmp/zlint.tar.gz https://github.com/zmap/zlint/releases/download/v3.6.0/zlint_3.6.0_Linux_x86_64.tar.gz
         tar -C /tmp/ -zxf /tmp/zlint.tar.gz --strip-components 1
         mv /tmp/zlint ${RUNNER_TOOL_CACHE}
         echo "${RUNNER_TOOL_CACHE}" >> $GITHUB_PATH
