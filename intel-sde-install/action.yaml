@@ -1,0 +1,16 @@
+name: "intel-sde-install"
+description: "Install Intel SDE"
+inputs:
+  sde-full-version:
+    description: "SDE full version"
+    required: true
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        curl -JLO "https://downloadmirror.intel.com/813591/sde-external-${{ inputs.sde-full-version }}-lin.tar.xz"
+        tar xvf sde-external-${{ inputs.sde-full-version }}-lin.tar.xz -C /opt
+
+    - shell: bash
+      run: echo "/opt/sde-external-${{ inputs.sde-full-version }}-lin" >> $GITHUB_PATH
