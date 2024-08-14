@@ -4,7 +4,7 @@ name: "cross-install"
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     # yamllint disable rule:line-length
     - name: Install pre-compiled cross
       run: |
