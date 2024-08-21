@@ -8,7 +8,7 @@ runs:
     # yamllint disable rule:line-length
     - name: Install pre-compiled cross
       run: |
-        wget -O /tmp/binaries.tar.gz https://github.com/cross-rs/cross/releases/download/v0.2.4/cross-x86_64-unknown-linux-gnu.tar.gz
+        wget -O /tmp/binaries.tar.gz https://github.com/cross-rs/cross/releases/download/v0.2.5/cross-x86_64-unknown-linux-gnu.tar.gz
         tar -C /tmp -xzf /tmp/binaries.tar.gz
         mv /tmp/cross ~/.cargo/bin
       shell: bash
