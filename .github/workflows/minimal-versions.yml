@@ -37,7 +37,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: RustCrypto/actions/cargo-cache@master
       - name: Install zlint
         if: inputs.install-zlint

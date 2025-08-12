@@ -20,6 +20,6 @@ jobs:
     outputs:
       msrv: ${{ steps.msrv.outputs.msrv }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: msrv
         run: echo "msrv=$(echo ${{ inputs.msrv }})" >> $GITHUB_OUTPUT
