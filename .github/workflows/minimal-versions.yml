@@ -48,12 +48,15 @@ jobs:
           toolchain: ${{ inputs.nightly }}
       - name: Remove other members from the workspace
         run: sed -z -E
-          "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]/members = [\"${{ inputs.working-directory }}\"]/g"
+          "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]
+          /members = [\"${{ inputs.working-directory }}\"]/g"
           -i ../Cargo.toml
       - name: Check replacement
         run: grep -q "members = \[\"${{ inputs.working-directory }}\"\]" ../Cargo.toml
-      - run: cargo update -Z minimal-versions
-      - run: ${{ inputs.nightly-cmd }}
+      - name: Generate Cargo.lock with minimal versions
+        run: cargo update -Z minimal-versions
+      - name: Run additional Nightly command
+        run: ${{ inputs.nightly-cmd }}
         # Perform tests
       - uses: dtolnay/rust-toolchain@master
         with:
