@@ -52,7 +52,9 @@ jobs:
           "/members = [\"${{ inputs.working-directory }}\"]/g"
           -i ../Cargo.toml
       - name: Check replacement
-        run: grep -q "members = \[\"${{ inputs.working-directory }}\"\]" ../Cargo.toml
+        run: grep -q
+          "members = \[\"${{ inputs.working-directory }}\"\]"
+          ../Cargo.toml
       - name: Generate Cargo.lock with minimal versions
         run: cargo update -Z minimal-versions
       - name: Run additional Nightly command
