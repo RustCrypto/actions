@@ -48,8 +48,8 @@ jobs:
           toolchain: ${{ inputs.nightly }}
       - name: Remove other members from the workspace
         run: sed -z -E
-          "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]
-          /members = [\"${{ inputs.working-directory }}\"]/g"
+          "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]"\
+          "/members = [\"${{ inputs.working-directory }}\"]/g"
           -i ../Cargo.toml
       - name: Check replacement
         run: grep -q "members = \[\"${{ inputs.working-directory }}\"\]" ../Cargo.toml
