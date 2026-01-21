@@ -46,16 +46,20 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.nightly }}
-        # Replace Cargo.toml at the workspace-level with a stub which still allows workspace-level configs to function
-      - run: |
-          cat > ../Cargo.toml <<EOF
-          [workspace]
-          resolver = "3"
-          members = ["$(pwd)"]
-          [workspace.lints]
-          EOF
-      - run: cargo update -Z minimal-versions
-      - run: ${{ inputs.nightly-cmd }}
+      - name: Remove other members from the workspace
+        run: sed -z -E
+          "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]/\
+          members = [\"${{ inputs.working-directory }}\"]/g"
+          -i ../Cargo.toml
+      - run: cat ../Cargo.toml
+      - name: Check replacement
+        run: grep -q
+          "members = \\[\"${{ inputs.working-directory }}\"\\]"
+          ../Cargo.toml
+      - name: Generate Cargo.lock with minimal versions
+        run: cargo update -Z minimal-versions
+      - name: Run additional Nightly command
+        run: ${{ inputs.nightly-cmd }}
         # Perform tests
       - uses: dtolnay/rust-toolchain@master
         with:
