@@ -46,8 +46,8 @@ jobs:
       - uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ inputs.nightly }}
-        # Use a stub Cargo.toml at the workspace-level which still allows workspace-level configs to function
-      - run: printf "[workspace]\nmembers=[\"%q\"]" $(pwd) >> ../Cargo.toml
+        # Replace Cargo.toml at the workspace-level with a stub which still allows workspace-level configs to function
+      - run: printf "[workspace]\nmembers=[\"%q\"]" $(pwd) > ../Cargo.toml
       - run: cargo update -Z minimal-versions
       - run: ${{ inputs.nightly-cmd }}
         # Perform tests
