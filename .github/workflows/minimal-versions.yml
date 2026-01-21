@@ -47,7 +47,13 @@ jobs:
         with:
           toolchain: ${{ inputs.nightly }}
         # Replace Cargo.toml at the workspace-level with a stub which still allows workspace-level configs to function
-      - run: printf "[workspace]\nmembers=[\"%q\"]" $(pwd) > ../Cargo.toml
+      - run: |
+          cat > ../Cargo.toml <<EOF
+          [workspace]
+          resolver = "3"
+          members = ["$(pwd)"]
+          [workspace.lints]
+          EOF
       - run: cargo update -Z minimal-versions
       - run: ${{ inputs.nightly-cmd }}
         # Perform tests
