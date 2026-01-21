@@ -51,9 +51,10 @@ jobs:
           "s/members = \\[([A-Za-z0-9_,-]|\"|\\n|\\s)*\\]"\
           "/members = [\"${{ inputs.working-directory }}\"]/g"
           -i ../Cargo.toml
+      - run: cat ../Cargo.toml
       - name: Check replacement
         run: grep -q
-          "members = \[\"${{ inputs.working-directory }}\"\]"
+          "members = \\[\"${{ inputs.working-directory }}\"\\]"
           ../Cargo.toml
       - name: Generate Cargo.lock with minimal versions
         run: cargo update -Z minimal-versions
