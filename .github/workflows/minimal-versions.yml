@@ -27,7 +27,7 @@ on:
         default: ''
       stable-cmd:
         type: string
-        default: cargo hack test --release --feature-powerset
+        default: cargo hack check --release --feature-powerset --no-dev-deps
 
 jobs:
   minimal-versions:
