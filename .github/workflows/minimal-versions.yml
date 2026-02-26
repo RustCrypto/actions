@@ -56,6 +56,14 @@ jobs:
         run: grep -q
           "members = \\[\"${{ inputs.working-directory }}\"\\]"
           ../Cargo.toml
+      - name: Remove local overrides
+        run: sed -i
+          '/^\[patch\.crates-io\]/,/^\[/ {
+            /^\[patch\.crates-io\]/d;
+            /^\[/!d;
+          }' ../Cargo.toml
+      - name: debug
+        run: cat ../Cargo.toml
       - name: Generate Cargo.lock with minimal versions
         run: cargo update -Z minimal-versions
       - name: Run additional Nightly command
