@@ -1,0 +1,65 @@
+name: 'Cache and Install Apt (.deb) Packages'
+description: 'A GitHub Action to cache and install Apt (.deb) packages'
+inputs:
+  packages:
+    description: 'A space-separated list of Apt (.deb) packages to install'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Create deb-cache directory if not exists
+      run: mkdir -p ./deb-cache
+      shell: bash
+
+    - name: Get package versions
+      id: get-versions
+      run: |
+        echo "${{ inputs.packages }}" | tr ' ' '\n' | sed 's/\\//g' | sed '/^$/d' > package-list.txt
+        cat package-list.txt
+        while IFS= read -r package; do
+          version=$(apt-cache policy $package | grep Candidate | awk '{print $2}')
+          echo "$package=$version" >> package-versions.txt
+        done < package-list.txt
+      shell: bash
+
+    - name: Set up cache for each package
+      id: cache-packages
+      uses: actions/cache@v4
+      with:
+        path: ./deb-cache
+        key: ${{ runner.os }}-deb-${{ hashFiles('package-versions.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-deb-
+
+    - name: Download packages if not cached
+      env:
+        DEBIAN_FRONTEND: 'noninteractive'
+      run: |
+        mkdir -p ./deb-cache
+        cp package-versions.txt ./deb-cache 
+        cp package-list.txt ./deb-cache 
+        cd ./deb-cache
+        while IFS= read -r package; do
+          echo "Processing package: $package"
+          version=$(grep "^$package=" package-versions.txt | cut -d '=' -f 2 || true)
+          echo "Processing version: $version"
+          package_file=$(ls $package*.deb 2>/dev/null | head -n 1 || true)
+
+          if [ -z "$package_file" ]; then
+            echo "Cache miss for $package. Downloading version $version..."
+            rm -f $package-*.deb
+            apt-get download $package=$version -y -qq --download-only ||
+              echo "Failed to download $package version $version"
+          else
+            echo "Cache hit for $package. Assuming correct version."
+          fi
+        done < package-list.txt
+      shell: bash
+
+    - name: Install packages
+      env:
+        DEBIAN_FRONTEND: 'noninteractive'
+      run: |
+        dpkg -i ./deb-cache/*.deb || sudo dpkg -i ./deb-cache/*.deb || apt-get install -f -y ||
+          sudo apt-get install -f -y
+      shell: bash
