@@ -10,7 +10,7 @@ runs:
     # yamllint disable rule:line-length
     - shell: bash
       run: |
-        curl -JLO "https://raw.githubusercontent.com/RustCrypto/third-party/refs/heads/master/intel-sde-external-${{ inputs.sde-full-version }}-lin.tar.xz"
+        curl -JLO "https://github.com/RustCrypto/third-party/releases/download/intel-sde-${{ inputs.sde-full-version }}/intel-sde-external-${{ inputs.sde-full-version }}-lin.tar.xz"
         tar xvf intel-sde-external-${{ inputs.sde-full-version }}-lin.tar.xz -C /opt
     # yamllint disable rule:line-length
     - shell: bash
