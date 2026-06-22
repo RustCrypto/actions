@@ -2,8 +2,8 @@ name: "intel-sde-install"
 description: "Install Intel SDE"
 inputs:
   sde-full-version:
+    default: "10.8.0-2026-03-15"
     description: "SDE full version"
-    required: true
 runs:
   using: composite
   steps:
