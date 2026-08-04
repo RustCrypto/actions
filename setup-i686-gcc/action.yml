@@ -2,9 +2,12 @@ name: Setup GitHub Actions runner for `i686-unknown-linux-gnu` builds
 runs:
   using: composite
   steps:
-    - name: Install packages
+    - name: apt-get update
+      shell: bash
+      run: sudo apt-get update
+    - name: apt-get install
       shell: bash
       env:
         DEBIAN_FRONTEND: noninteractive
         NEEDRESTART_SUSPEND: 1
-      run: sudo apt-get update && apt-get install -y libc6-dev-i386 lib32gcc-13-dev
+      run: sudo apt-get install -y libc6-dev-i386 lib32gcc-13-dev
