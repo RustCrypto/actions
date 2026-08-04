@@ -7,4 +7,4 @@ runs:
       env:
         DEBIAN_FRONTEND: noninteractive
         NEEDRESTART_SUSPEND: 1
-      run: sudo apt-get update && apt-get install -y ${{ inputs.packages }}
+      run: sudo apt-get update && apt-get install -y libc6-dev-i386 lib32gcc-13-dev
