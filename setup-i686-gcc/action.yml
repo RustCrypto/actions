@@ -1,0 +1,10 @@
+name: Setup GitHub Actions runner for `i686-unknown-linux-gnu` builds
+runs:
+  using: composite
+  steps:
+    - name: Install packages
+      shell: bash
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        NEEDRESTART_SUSPEND: 1
+      run: sudo apt-get update && apt-get install -y ${{ inputs.packages }}
