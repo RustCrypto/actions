@@ -10,4 +10,4 @@ runs:
       env:
         DEBIAN_FRONTEND: noninteractive
         NEEDRESTART_SUSPEND: 1
-      run: sudo apt-get install -y libc6-dev-i386 lib32gcc-13-dev
+      run: sudo apt-get install -y --no-install-recommends libc6-dev-i386 lib32gcc-13-dev
