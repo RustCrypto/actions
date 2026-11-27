@@ -1,0 +1,92 @@
+---
+name: prepare-lock-toolchain
+description: Prepares Cargo.lock and Rust toolchain
+
+inputs:
+  package:
+    required: true
+    type: string
+  package-dir:
+    required: true
+    type: string
+  targets:
+    type: string
+  components:
+    type: string
+  prepare:
+    required: true
+    type: choice
+    options:
+      - stable
+      - msrv
+      - minimal-versions
+
+runs:
+  using: composite
+  steps:
+
+    - name: Validate inputs.prepare
+      shell: bash
+      run: |
+        case "${{ inputs.prepare }}" in
+          stable|msrv|minimal-versions) ;;
+          *)
+            echo "Invalid inputs.prepare. Expected stable, msrv, or minimal-versions." >&2
+            exit 1
+            ;;
+        esac
+
+    - name: Install stable Rust
+      if: inputs.prepare == 'stable'
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ inputs.targets }}
+        components: ${{ inputs.components }}
+
+    - name: Remove other members from the workspace
+      if: inputs.prepare != 'stable'
+      shell: bash
+      run: perl
+        -0pi
+        -e 's/^members\s*=\s*\[.*?^\]\s*$/members = ["${{ inputs.package }}"]/ms'
+        Cargo.toml
+
+    - name: Extract rust-version from Cargo.toml
+      if: inputs.prepare != 'stable'
+      id: msrv
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.package }}
+        PACKAGE_DIR: ${{ inputs.package-dir }}
+      run: |
+        package_dir="${PACKAGE_DIR:-$PACKAGE}"
+        version=$(grep 'rust-version =' $package_dir/Cargo.toml | cut -d '"' -f 2)
+
+        if [[ -z "$version" || "$version" == "null" ]]; then
+          echo "Could not find rust-version" >&2
+          exit 1
+        fi
+
+        echo "version=$version" >> "$GITHUB_OUTPUT"
+
+    - name: Install MSRV Rust
+      if: inputs.prepare != 'stable'
+      uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: ${{ steps.msrv.outputs.version }}
+        targets: ${{ inputs.targets }}
+        components: ${{ inputs.components }}
+
+    - name: Update to latest MSRV-compatible dependency versions
+      if: inputs.prepare == 'msrv'
+      shell: bash
+      env:
+        CARGO_RESOLVER_INCOMPATIBLE_RUST_VERSIONS: fallback
+      run: cargo update
+
+    - name: Update to minimal dependency versions
+      if: inputs.prepare == 'minimal-versions'
+      env:
+        RUSTC_BOOTSTRAP: 1
+      shell: bash
+      run: cargo update -Z minimal-versions
